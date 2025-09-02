@@ -5,18 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rock-Paper-Scissors</title>
     <script>
-      console.log("Hello World");
+      let humanScore = 0;
+      let computerScore = 0;
+      let humanCount = 0;
+      let computerCount = 0;
+
       function getComputerChoice() {
         let random = Math.floor(Math.random() * 3 + 1);
-        console.log(random);
+
+        switch (random) {
+          case 1:
+            return "rock";
+            break;
+          case 2:
+            return "paper";
+            break;
+          case 3:
+            return "scissor";
+            break;
+        }
       }
 
       function getHumanChoice() {
         let userInput = prompt(
           "Rock, Paper or Scissor. Which one do you choose??"
         );
-        console.log(userInput);
+        return userInput;
       }
+
+      function playRound(humanChoice, computerChoice) {
+        humanChoice = humanChoice.toLowerCase();
+
+        // console.log(humanChoice);
+        console.log(
+          "your choice was: " +
+            humanChoice +
+            " and the computer's choice was: " +
+            computerChoice
+        );
+
+        if (
+          (humanChoice === "rock" && computerChoice === "scissor") ||
+          (humanChoice === "paper" && computerChoice === "rock") ||
+          (humanChoice === "scissor" && computerChoice === "paper")
+        ) {
+          console.log("You win! 1 point to you.");
+          humanCount++;
+        } else if (humanChoice === computerChoice) {
+          console.log("Same Choice, points to none of you.");
+        } else {
+          console.log("You loose! 1 point to the computer.");
+          computerCount++;
+        }
+        console.log(
+          "Your Score: " + humanCount + "\n Computer's Score: " + computerCount
+        );
+      }
+
+      let computerChoice = getComputerChoice();
+      let humanChoice = getHumanChoice();
+
+      //playRound(humanChoice, computerChoice);
+
+      function playGame() {
+        playRound(humanChoice, computerChoice);
+        playRound(humanChoice, computerChoice);
+        playRound(humanChoice, computerChoice);
+        playRound(humanChoice, computerChoice);
+        playRound(humanChoice, computerChoice);
+
+        if (computerCount > humanCount) {
+          console.log("Sorry, the Computer Won (womp, womp :))");
+        } else {
+          console.log("You won! Yay! ;)");
+        }
+      }
+
+      playGame();
     </script>
   </head>
   <body></body>
