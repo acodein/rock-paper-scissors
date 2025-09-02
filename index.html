@@ -67,14 +67,24 @@
 
       //playRound(humanChoice, computerChoice);
 
+      function reset() {
+        humanChoice = getHumanChoice();
+        computerChoice = getComputerChoice();
+        humanScore += humanCount;
+        computerScore += computerCount;
+      }
       function playGame() {
         playRound(humanChoice, computerChoice);
+        reset();
         playRound(humanChoice, computerChoice);
+        reset();
         playRound(humanChoice, computerChoice);
+        reset();
         playRound(humanChoice, computerChoice);
+        reset();
         playRound(humanChoice, computerChoice);
 
-        if (computerCount > humanCount) {
+        if (computerScore > humanScore) {
           console.log("Sorry, the Computer Won (womp, womp :))");
         } else {
           console.log("You won! Yay! ;)");
