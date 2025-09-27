@@ -4,95 +4,138 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rock-Paper-Scissors</title>
-    <script>
-      let humanScore = 0;
-      let computerScore = 0;
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+      }
+
+      button {
+        border: none;
+        border-radius: 5px;
+        background-color: antiquewhite;
+        color: rgb(7, 41, 41);
+        margin: 10px;
+      }
+
+      button:hover {
+        cursor: pointer;
+      }
+
+      p {
+        font-size: medium;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Rock, Paper & Scissor</h1>
+    <h3>Select the option below:</h3>
+    <main>
+      <div class="container">
+        <button value="rock" class="rock">Rock</button>
+        <button value="paper" class="paper">Paper</button>
+        <button value="scissor" class="scissor">Scissor</button>
+      </div>
+    </main>
+    <div class="results"></div>
+    <script defer>
       let humanCount = 0;
       let computerCount = 0;
+      let roundCount = 0;
+
+      const main = document.querySelector("main");
+      const container = document.querySelector(".container");
+
+      const results = document.querySelector(".results");
+
+      const resultPara = document.createElement("p");
+
+      const roundInfo = document.createElement("p");
+      roundInfo.id = "round-info";
+      results.appendChild(roundInfo);
+
+      const playAgain = document.createElement("button");
+      playAgain.classList.add("again");
+      playAgain.innerText = "Play Again";
+
+      const roundByRound = document.createElement("p");
+      roundByRound.id = "round-by-round";
+      results.appendChild(roundByRound);
+
+      const button = document.querySelectorAll("button");
 
       function getComputerChoice() {
-        let random = Math.floor(Math.random() * 3 + 1);
-
-        switch (random) {
-          case 1:
-            return "rock";
-            break;
-          case 2:
-            return "paper";
-            break;
-          case 3:
-            return "scissor";
-            break;
-        }
+        const choices = ["rock", "paper", "scissor"];
+        let random = Math.floor(Math.random() * 3);
+        return choices[random];
       }
 
-      function getHumanChoice() {
-        let userInput = prompt(
-          "Rock, Paper or Scissor. Which one do you choose??"
-        );
-        return userInput;
-      }
+      // EVERYTHING WILL BE INSIDE THE BUTTON.FOREACH //
+      let humanChoice;
+      button.forEach((element) => {
+        element.addEventListener("click", (event) => {
+          const clikcedEvent = event.target;
+          const data = element.value;
+          humanChoice = data;
+          let computerChoice = getComputerChoice();
 
-      function playRound(humanChoice, computerChoice) {
-        humanChoice = humanChoice.toLowerCase();
+          roundByRound.innerText = `your choice was:  +
+            ${humanChoice} +
+             and the computer's choice was:  +
+            ${computerChoice}`;
 
-        // console.log(humanChoice);
-        console.log(
-          "your choice was: " +
-            humanChoice +
-            " and the computer's choice was: " +
-            computerChoice
-        );
+          if (
+            (humanChoice === "rock" && computerChoice === "scissor") ||
+            (humanChoice === "paper" && computerChoice === "rock") ||
+            (humanChoice === "scissor" && computerChoice === "paper")
+          ) {
+            roundByRound.innerText = "You win! 1 point to you.";
+            humanCount++;
+          } else if (humanChoice === computerChoice) {
+            roundByRound.innerText = "Same Choice, points to none of you.";
+          } else {
+            roundByRound.innerText = "You loose! 1 point to the computer.";
+            computerCount++;
+          }
+          roundCount++;
 
-        if (
-          (humanChoice === "rock" && computerChoice === "scissor") ||
-          (humanChoice === "paper" && computerChoice === "rock") ||
-          (humanChoice === "scissor" && computerChoice === "paper")
-        ) {
-          console.log("You win! 1 point to you.");
-          humanCount++;
-        } else if (humanChoice === computerChoice) {
-          console.log("Same Choice, points to none of you.");
-        } else {
-          console.log("You loose! 1 point to the computer.");
-          computerCount++;
-        }
-        console.log(
-          "Your Score: " + humanCount + "\n Computer's Score: " + computerCount
-        );
-      }
+          roundInfo.innerText = `In round = +
+            ${roundCount} +
+            Your Score:  +
+            ${humanCount} +
+            Computer's Score:  +
+            ${computerCount}`;
 
-      let computerChoice = getComputerChoice();
-      let humanChoice = getHumanChoice();
-
-      //playRound(humanChoice, computerChoice);
-
-      function reset() {
-        humanChoice = getHumanChoice();
-        computerChoice = getComputerChoice();
-        humanScore += humanCount;
-        computerScore += computerCount;
-      }
-      function playGame() {
-        playRound(humanChoice, computerChoice);
-        reset();
-        playRound(humanChoice, computerChoice);
-        reset();
-        playRound(humanChoice, computerChoice);
-        reset();
-        playRound(humanChoice, computerChoice);
-        reset();
-        playRound(humanChoice, computerChoice);
-
-        if (computerScore > humanScore) {
-          console.log("Sorry, the Computer Won (womp, womp :))");
-        } else {
-          console.log("You won! Yay! ;)");
-        }
-      }
-
-      playGame();
+          if (roundCount == 5) {
+            if (computerCount > humanCount) {
+              console.log("Computer Wins");
+              resultPara.innerText = "Computer Wins";
+              results.appendChild(resultPara);
+              results.appendChild(playAgain);
+              main.removeChild(container);
+            } else if (humanCount > computerCount) {
+              console.log("Human is the winner");
+              resultPara.innerText = "The Human Wins";
+              results.appendChild(resultPara);
+              results.appendChild(playAgain);
+              main.removeChild(container);
+            } else {
+              console.log("This is a draw. Maybe next time");
+              resultPara.innerText = "This is a draw. Maybe next time";
+              results.appendChild(resultPara);
+              results.appendChild(playAgain);
+              main.removeChild(container);
+            }
+          }
+          playAgain.addEventListener("click", () => {
+            window.location.reload();
+          });
+        });
+      });
     </script>
-  </head>
-  <body></body>
+  </body>
 </html>
